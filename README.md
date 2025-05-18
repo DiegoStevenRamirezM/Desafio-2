@@ -93,6 +93,19 @@ Estos serán los archivos .txt que usaré:
 | reservas_vigentes.txt     | Reservaciones activas o vigentes.                                                  |
 | reservas_historicas.txt| Reservaciones vencidas trasladadas a histórico.                                    |
 
+### 2.6 Diagrama UML
+
+El diagrama de clases es la columna vertebral del diseño orientado a objetos en UdeAStay, ya que:
+
+- **Clarifica la estructura**: Visualiza las entidades principales (`Plataforma`, `GestorDatos`, `Huesped`, etc.) y sus relaciones.  
+- **Guía la implementación**: Define atributos, métodos y cardinalidades (ej: `1..*` para listas dinámicas).  
+- **Evita redundancias**: Modela composiciones/agregaciones (como `GestorDatos` y `Huesped`) para optimizar memoria.  
+
+---
+
+### 🖼️ **Este es mi diagrama de clases**  
+
+![Diagrama UML](./Diagrama%20UML%20Desafío%202.jpg)
 
 
 
