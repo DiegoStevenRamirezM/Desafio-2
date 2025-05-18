@@ -29,6 +29,22 @@ Para diseñar este sistema primero se identificaron las principales entidades in
 
 **Eficiencia:** Se usará memoria dinámica, por ejemplo con arreglos dinámicos para almacenar datos.
 
+### 2.2 Estructura modular del sistema
+
+El sistema estará organizado en ocho clases, cada una con un rol específico para que el programa sea claro y fácil de mantener. Esta estructura permite que cada parte del sistema funcione de manera independiente, pero todas se conectan a través de la clase principal que actúa como coordinadora. La descripción de cómo está organizado el sistema y las responsabilidades de cada clase se podrá ver en la siguiente tabla:
+
+
+| Clase          | Rol principal                                                                 |
+|----------------|-------------------------------------------------------------------------------|
+| Fecha          | Manejar fechas, permitiendo validarlas, sumar días, compararlas y mostrarlas en un formato claro (por ejemplo, “Lunes, 12 de Mayo del 2025”).                                              |
+| Reservacion    | Gestionar los detalles de una reserva, incluyendo código, fechas, duración, alojamiento, huésped, pago y notas. Genera comprobantes y calcula la fecha de salida.    |
+| Huesped        | Representar a un huésped, guardando su documento, antigüedad, puntuación, contraseña y lista de reservaciones. Permite añadir reservas y mostrar sus datos.         |
+| Anfitrion      | Representar a un anfitrión, almacenando su documento, antigüedad, puntuación, contraseña y lista de alojamientos. Permite añadir propiedades y mostrar sus datos.          |
+| Alojamiento    | Administrar la información de un alojamiento, como su código, nombre, dirección, tipo, precio, amenidades y fechas reservadas. Verifica si está disponible para nuevas reservas.             |
+| Portal     | Coordinar el sistema, manejando el inicio de sesión, los menús para huéspedes y anfitriones, y las acciones principales como reservar o cancelar. Conecta todas las clases.    |
+| GestorDatos    | Administrar la información en memoria, almacenando y buscando huéspedes, anfitriones, alojamientos y reservas, y asegurando que no haya datos repetidos o errores.      |
+| GestorArchivos | Se va a encargar de leer y escribir los datos en archivos de texto, asegurando que la información de huéspedes, anfitriones, alojamientos y reservas se guarde correctamente.|
+
 
 
 
