@@ -107,5 +107,17 @@ El diagrama de clases es la columna vertebral del diseño orientado a objetos en
 
 ![Diagrama UML](./Diagrama%20UML%20Desafío%202.jpg)
 
+### 2.7 Tabla de relaciones entre clases en el sistema UdeAStay
 
-
+| Clase A       | Clase B       | Tipo de Relación       | ¿Por qué?  |
+|---------------|---------------|------------------------|-----------------------------------|
+| Portal    | GestorDatos       |       Asociación (1 a 1)    | Portal necesita un objeto de `GestorDatos` para ejecutar funciones como autenticación, manejo de usuarios, búsqueda de datos y creación de reservaciones. Sin embargo, `GestorDatos` es un módulo auxiliar independiente que no forma parte estructural de `Portal`. Por tanto, la relación es una asociación funcional. |
+| Portal    | GestorArchivos|      Asociación (1 a 1)     | Portal delega las operaciones de entrada/salida a `GestorArchivos`, pero `GestorArchivos` puede funcionar por separado, y no se destruye junto con `Portal`. Por eeso la relación es de asociación y no de composición ni agregación. |
+| GestorDatos   | Huesped       |      Agregación (0..N)      | `GestorDatos` contiene una colección dinámica de `Huespedes`, pero los huéspedes son objetos autónomos que pueden crearse, modificarse o incluso existir fuera del contexto de `GestorDatos` (por ejemplo, al cargarlos desde un archivo). Por ello, la relación es de agregación: `Huesped` es parte del sistema, pero no depende estructuralmente de `GestorDatos`. |
+| GestorDatos   | Anfitrion     |      Agregación (0..N)      | Parecido a los huesped, los `Anfitriones` son gestionados por `GestorDatos` mediante un arreglo dinámico. Sin embargo, pueden existir sin él (por ejemplo, ser creados antes de guardar en el sistema). Eso significa una agregación: `GestorDatos` los administra, pero no los posee completamente. |
+| GestorDatos   | Alojamiento      |  Agregación (0..N)       | Los `Alojamientos` son creados por los `Anfitriones`, pero gestionados globalmente por `GestorDatos`. No hay dependencia estructural fuerte: son objetos independientes. |
+| GestorDatos   | Reservacion      |  Composición (0..N)  | Las `Reservaciones` son creadas y destruidas exclusivamente por `GestorDatos`. Si `GestorDatos` se elimina, todas sus reservaciones también se destruyen. |
+| Reservacion   | Fecha            |  Asociación (1 a 1)      | Cada `Reservacion` usa objetos `Fecha` (entrada/salida), pero no los gestiona. Las fechas son valores compuestos, no dependen de la reserva. |
+| Alojamiento   | Fecha (reservas) |  Composición (0..N) | Las fechas de reserva son parte integral del `Alojamiento`. Si se elimina el alojamiento, sus fechas reservadas también desaparecen . |
+| Huesped       | Reservacion      |  Asociación débil (0..N) | El `Huesped` solo guarda códigos (strings) de reservas, no instancias. Relación indirecta sin dependencia estructural. |
+| Anfitrion     | Alojamiento      |  Asociación débil (0..N) | El `Anfitrion` referencia alojamientos mediante códigos (strings), sin contener los objetos directamente. Relación lógica, no estructural. |
