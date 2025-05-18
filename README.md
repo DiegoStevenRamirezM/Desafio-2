@@ -57,5 +57,20 @@ Esta estructura hace que el sistema sea fácil de usar y mantener, ya que cada c
 
 Las clases están relacionadas de manera lógica. Por ejemplo, Alojamiento usa Fecha para manejar sus fechas reservadas, y Huesped guarda códigos de Reservacion para rastrear las reservas de un usuario.
 
+### 2.4 Estructuras de datos
+Usaré arreglos dinámicos de punteros. Esta estrategia es para el cumplimiento del desafío, además de proporcionar un control detallado sobre la gestión de memoria y la eficiencia computacional del sistema. Cada lista de objetos (como huéspedes, anfitriones, alojamientos o reservaciones) se representa mediante un arreglo de punteros a objetos, el cual se redimensiona cuando se agrega un nuevo elemento. La estructura será la siguiente:
+
+| Entidad / Datos          | Clase responsable | Estructura utilizada               | Atributo / Rol de clase responsable       |
+|--------------------------|-------------------|------------------------------------|------------------------------------------|
+| Huéspedes                | GestorDatos       | `Huesped**` (punteros dinámicos)   | `Huesped** huespedes`                    |
+| Anfitriones              | GestorDatos       | `Anfitrion**`                      | `Anfitrion** anfitriones`                |
+| Alojamientos             | GestorDatos       | `Alojamiento**`                    | `Alojamiento** alojamientos`             |
+| Reservaciones vigentes   | GestorDatos       | `Reservacion**`                    | `Reservacion** reservacionesVigentes`    |
+| Reservaciones históricas | GestorDatos       | `Reservacion**`                    | `Reservacion** reservasHistoricas`       |
+| Fechas reservadas (por alojamiento) | Alojamiento | `Fecha* fechasInicio`, `Fecha* fechasFin` | Interno a cada alojamiento          |
+| Amenidades               | Alojamiento       | `string* amenidades`               | Interno                                 |
+| Códigos de reservas      | Huesped           | `string* codigosReservaciones`     | Interno                                 |
+| Códigos de alojamientos  | Anfitrion         | `string* codigosAlojamientos`        | Interno                                 |
+
 
 
