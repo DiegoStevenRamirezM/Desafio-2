@@ -45,7 +45,17 @@ El sistema estará organizado en ocho clases, cada una con un rol específico pa
 | GestorDatos    | Administrar la información en memoria, almacenando y buscando huéspedes, anfitriones, alojamientos y reservas, y asegurando que no haya datos repetidos o errores.      |
 | GestorArchivos | Se va a encargar de leer y escribir los datos en archivos de texto, asegurando que la información de huéspedes, anfitriones, alojamientos y reservas se guarde correctamente.|
 
+### 2.3 Justificación de la modularidad.
 
+Esta estructura hace que el sistema sea fácil de usar y mantener, ya que cada clase tiene un propósito claro. También permite agregar nuevas funciones en el futuro en caso de que se me haya olvidado alguna, sin afectar el resto del programa. En general dividí las clases en estas 3:
+
+***Clases de Entidades:*** Las clases Fecha, Huesped, Anfitrion, Alojamiento y Reservacion representan los objetos principales del sistema. Cada una guarda la información necesaria y ofrece funciones para trabajar con esos datos, como validar fechas o mostrar comprobantes.
+
+***Clases de Gestión:*** GestorArchivos y GestorDatos se crearon para manejar tareas específicas. GestorArchivos trabaja con los archivos donde se guarda la información, mientras que GestorDatos organiza los datos en la memoria del programa, haciendo que las búsquedas y actualizaciones sean más rápidas.
+
+***Clase Coordinadora:*** Portal actúa como el centro del sistema, conectando las demás clases. Por ejemplo, cuando un huésped quiere reservar, Plataforma usa GestorDatos para buscar alojamientos y GestorArchivos para guardar la nueva reserva.
+
+Las clases están relacionadas de manera lógica. Por ejemplo, Alojamiento usa Fecha para manejar sus fechas reservadas, y Huesped guarda códigos de Reservacion para rastrear las reservas de un usuario.
 
 
 
