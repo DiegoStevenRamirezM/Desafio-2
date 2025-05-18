@@ -72,5 +72,27 @@ Usaré arreglos dinámicos de punteros. Esta estrategia es para el cumplimiento 
 | Códigos de reservas      | Huesped           | `string* codigosReservaciones`     | Interno                                 |
 | Códigos de alojamientos  | Anfitrion         | `string* codigosAlojamientos`        | Interno                                 |
 
+### 2.5  Formato de los archivos 
+Para el desarrollo del sistema UdeAStay se optó por utilizar archivos de texto plano (.txt) como método de almacenamiento persistente para las entidades clave del sistema: huéspedes, anfitriones, alojamientos y reservaciones (tanto vigentes como históricas). 
+
+Esta decisión se basa en varias razones:
+
+**1.** La primera razón es que los archivos .txt son fácilmente legibles y editables, lo que facilita la depuración, revisión y carga manual de datos en caso de pruebas o demostraciones. Además, los archivos de texto no requieren bibliotecas adicionales ni formatos binarios complejos, lo que nos ayudará a tener una mayor portabilidad del sistema entre distintos entornos o plataformas de desarrollo.
+
+**2.** El uso de archivos .txt permite aplicar directamente conceptos de manejo básico de archivos en C++.
+
+**3.** Dividir la información en archivos separados por entidad (uno por clase a excepción de Fecha) permite lograr una estructura modular y organizada, facilitando el mantenimiento y la escalabilidad del sistema. Al tener  una clase especializada (GestorArchivos), estos archivos pueden ser fácilmente reutilizados, reescritos o extendidos según futuras necesidades del sistema sin alterar la lógica del programa.
+
+Estos serán los archivos .txt que usaré:
+
+| Archivo               | Contenido principal                                                                 |
+|-----------------------|------------------------------------------------------------------------------------|
+| huespedes.txt         | Lista de huéspedes registrados en la plataforma.                                   |
+| anfitriones.txt       | Lista de anfitriones registrados.                                                  |
+| alojamientos.txt      | Detalles de los alojamientos disponibles.           |
+| reservas_vigentes.txt     | Reservaciones activas o vigentes.                                                  |
+| reservas_historicas.txt| Reservaciones vencidas trasladadas a histórico.                                    |
+
+
 
 
