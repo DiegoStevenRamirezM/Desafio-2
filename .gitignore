@@ -1,0 +1,20 @@
+# Archivos generados por Qt
+build-*/
+*.pro.user
+*.autosave
+*.qmake.stash
+
+# Binarios y ejecutables
+*.exe
+*.app
+*.dll
+*.so
+
+# Archivos de depuración y objetos
+*.o
+*.obj
+*.patch
+
+# Directorios temporales
+Debug/
+Release/
