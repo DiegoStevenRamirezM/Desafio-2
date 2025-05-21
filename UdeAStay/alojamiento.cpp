@@ -126,3 +126,106 @@ bool Alojamiento::cargarAmenidades(const string* amenidades, int numAmenidades) 
     }
     return true;
 }
+bool Alojamiento::agregarFechaReservada(Fecha inicio, Fecha fin) {
+    Fecha hoy(17, 5, 2025);
+    Fecha limite(17, 5, 2026);
+
+    // Validar fechas futuras y dentro de un año
+    if (inicio < hoy || fin < hoy || inicio > limite || fin > limite) {
+        return false;
+    }
+
+    // Validar que inicio sea antes que fin
+    if (!(inicio < fin)) {
+        return false;
+    }
+
+    // Validar solapamiento
+    for (int i = 0; i < numFechasReservadas; i++) {
+        Fecha resInicio = fechasInicio[i];
+        Fecha resFin = fechasFin[i];
+        if (!(fin < resInicio || inicio > resFin)) {
+            return false;
+        }
+    }
+
+    // Redimensionar si necesario
+    if (numFechasReservadas >= capacidadFechas) {
+        capacidadFechas *= 2;
+        Fecha* nuevoInicio = new Fecha[capacidadFechas];
+        Fecha* nuevoFin = new Fecha[capacidadFechas];
+        for (int i = 0; i < numFechasReservadas; i++) {
+            nuevoInicio[i] = fechasInicio[i];
+            nuevoFin[i] = fechasFin[i];
+        }
+        delete[] fechasInicio;
+        delete[] fechasFin;
+        fechasInicio = nuevoInicio;
+        fechasFin = nuevoFin;
+    }
+
+    // Añadir rango
+    fechasInicio[numFechasReservadas] = inicio;
+    fechasFin[numFechasReservadas] = fin;
+    numFechasReservadas++;
+    return true;
+}
+
+bool Alojamiento::estaDisponible(Fecha inicio, int duracion) const {
+    if (duracion <= 0) {
+        return false;
+    }
+    Fecha fin = inicio.sumarDias(duracion - 1);
+    if (!inicio.esValida() || !fin.esValida()) {
+        return false;
+    }
+    Fecha hoy(17, 5, 2025);
+    Fecha limite(17, 5, 2026);
+    if (inicio < hoy || fin < hoy || inicio > limite || fin > limite) {
+        return false;
+    }
+    if (inicio > fin) {
+        return false;
+    }
+    for (int i = 0; i < numFechasReservadas; i++) {
+        Fecha resInicio = fechasInicio[i];
+        Fecha resFin = fechasFin[i];
+        if (!(fin < resInicio || inicio > resFin)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Alojamiento::mostrarInfo() const {
+    cout << "Informacion del Alojamiento" << endl;
+    cout << "--------------------------" << endl;
+    cout << "Codigo: " << codigo << endl;
+    cout << "Nombre: " << nombre << endl;
+    cout << "Tipo: " << tipo << endl;
+    cout << "Departamento: " << departamento << endl;
+    cout << "Municipio: " << municipio << endl;
+    cout << "Direccion: " << direccion << endl;
+    cout << "Precio por noche: $" << fixed << setprecision(2) << precioPorNoche << endl;
+    cout << "Documento del Anfitrion: " << documentoAnfitrion << endl;
+    cout << "Amenidades: ";
+    if (numAmenidades == 0) {
+        cout << "Ninguna";
+    } else {
+        for (int i = 0; i < numAmenidades; i++) {
+            cout << amenidades[i];
+            if (i < numAmenidades - 1) cout << ", ";
+        }
+    }
+    cout << endl;
+    cout << "Fechas reservadas: ";
+    if (numFechasReservadas == 0) {
+        cout << "Ninguna";
+    } else {
+        for (int i = 0; i < numFechasReservadas; i++) {
+            cout << fechasInicio[i].toString() << " al " << fechasFin[i].toString();
+            if (i < numFechasReservadas - 1) cout << ", ";
+        }
+    }
+    cout << endl;
+}
