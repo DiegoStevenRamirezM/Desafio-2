@@ -9,8 +9,6 @@ private:
     int antiguedad; // En meses
     double puntuacion; // De 0 a 5.0
     std::string contrasena;
-    std::string* codigosReservaciones; // Arreglo dinámico de códigos
-    int numReservaciones; // Número de reservas
 
 public:
     // Constructores
@@ -26,8 +24,6 @@ public:
     int getAntiguedad() const;
     double getPuntuacion() const;
     std::string getContrasena() const;
-    std::string* getCodigosReservaciones() const;
-    int getNumReservaciones() const;
 
     // Setters
     void setDocumento(std::string doc);
@@ -36,7 +32,6 @@ public:
     void setContrasena(std::string pass);
 
     // Métodos
-    bool agregarReservacion(std::string codigo); // Añade una reserva
     void mostrarInfo() const; // Muestra los datos del huésped
 };
 
