@@ -35,7 +35,9 @@ public:
     bool operator==(const Fecha& otra) const;
     bool operator<(const Fecha& otra) const;
     bool operator>(const Fecha& otra) const;
-    bool operator>=(const Fecha& otra) const; // Añadido
+    bool operator>=(const Fecha& otra) const;
+    bool operator<=(const Fecha& otra) const;
+
     Fecha operator+(int dias) const;
 };
 

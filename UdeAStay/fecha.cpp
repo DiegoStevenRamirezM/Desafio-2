@@ -83,6 +83,10 @@ bool Fecha::operator>=(const Fecha& otra) const {
     return *this > otra || *this == otra;
 }
 
+bool Fecha::operator<=(const Fecha& otra) const {
+    return (*this < otra) || (*this == otra);
+}
+
 Fecha Fecha::operator+(int dias) const {
     return sumarDias(dias);
 }
