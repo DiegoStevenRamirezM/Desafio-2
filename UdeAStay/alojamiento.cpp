@@ -7,14 +7,14 @@ using namespace std;
 
 Alojamiento::Alojamiento()
     : codigo(""), nombre("Sin nombre"), direccion("Sin direccion"), departamento("Sin departamento"),
-    municipio("Sin municipio"), tipo("Casa"), precioPorNoche(0.0), documentoAnfitrion(""),
+    municipio("Sin municipio"), tipo("Casa"), precioPorNoche(0), documentoAnfitrion(""),
     numAmenidades(0), capacidadAmenidades(10), numFechasReservadas(0), capacidadFechas(10) {
     amenidades = new string[capacidadAmenidades];
     fechasInicio = new Fecha[capacidadFechas];
     fechasFin = new Fecha[capacidadFechas];
 }
 
-Alojamiento::Alojamiento(string cod, string nom, string dir, string depto, string mun, string t, double precio, string docAnfitrion)
+Alojamiento::Alojamiento(string cod, string nom, string dir, string depto, string mun, string t, int precio, string docAnfitrion)
     : codigo(cod), nombre(nom), direccion(dir), departamento(depto), municipio(mun),
     precioPorNoche(precio), documentoAnfitrion(docAnfitrion),
     numAmenidades(0), capacidadAmenidades(10), numFechasReservadas(0), capacidadFechas(10) {
@@ -24,7 +24,7 @@ Alojamiento::Alojamiento(string cod, string nom, string dir, string depto, strin
     if (departamento.empty()) departamento = "Sin departamento";
     if (municipio.empty()) municipio = "Sin municipio";
     tipo = (t == "Casa" || t == "Apartamento") ? t : "Casa";
-    precioPorNoche = (precio >= 0) ? precio : 0.0;
+    precioPorNoche = (precio >= 0) ? precio : 0;
     if (documentoAnfitrion.empty()) documentoAnfitrion = "DESCONOCIDO";
     amenidades = new string[capacidadAmenidades];
     fechasInicio = new Fecha[capacidadFechas];
@@ -60,7 +60,7 @@ string Alojamiento::getDireccion() const { return direccion; }
 string Alojamiento::getDepartamento() const { return departamento; }
 string Alojamiento::getMunicipio() const { return municipio; }
 string Alojamiento::getTipo() const { return tipo; }
-double Alojamiento::getPrecioPorNoche() const { return precioPorNoche; }
+int Alojamiento::getPrecioPorNoche() const { return precioPorNoche; }
 string Alojamiento::getDocumentoAnfitrion() const { return documentoAnfitrion; }
 string* Alojamiento::getAmenidades() const { return amenidades; }
 int Alojamiento::getNumAmenidades() const { return numAmenidades; }
@@ -92,8 +92,8 @@ void Alojamiento::setTipo(string t) {
     tipo = (t == "Casa" || t == "Apartamento") ? t : "Casa";
 }
 
-void Alojamiento::setPrecioPorNoche(double precio) {
-    precioPorNoche = (precio >= 0) ? precio : 0.0;
+void Alojamiento::setPrecioPorNoche(int precio) {
+    precioPorNoche = (precio >= 0) ? precio : 0;
 }
 
 void Alojamiento::setDocumentoAnfitrion(string docAnfitrion) {
@@ -206,7 +206,7 @@ void Alojamiento::mostrarInfo() const {
     cout << "Departamento: " << departamento << endl;
     cout << "Municipio: " << municipio << endl;
     cout << "Direccion: " << direccion << endl;
-    cout << "Precio por noche: $" << fixed << setprecision(2) << precioPorNoche << endl;
+    cout << "Precio por noche: $" << precioPorNoche << endl;
     cout << "Documento del Anfitrion: " << documentoAnfitrion << endl;
     cout << "Amenidades: ";
     if (numAmenidades == 0) {

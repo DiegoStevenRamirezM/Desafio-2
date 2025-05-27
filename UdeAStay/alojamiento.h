@@ -13,7 +13,7 @@ private:
     std::string departamento;
     std::string municipio;
     std::string tipo; // Casa o Apartamento
-    double precioPorNoche;
+    int precioPorNoche;
     std::string documentoAnfitrion;
     std::string* amenidades; // Arreglo dinámico
     int numAmenidades;
@@ -27,7 +27,7 @@ public:
     //Constructores
     Alojamiento();
     Alojamiento(std::string cod, std::string nom, std::string dir, std::string depto,
-                std::string mun, std::string t, double precio, std::string docAnfitrion);
+                std::string mun, std::string t, int precio, std::string docAnfitrion);
     Alojamiento(const Alojamiento& otro);
 
     // Destructor
@@ -40,7 +40,7 @@ public:
     std::string getDepartamento() const;
     std::string getMunicipio() const;
     std::string getTipo() const;
-    double getPrecioPorNoche() const;
+    int getPrecioPorNoche() const;
     std::string getDocumentoAnfitrion() const;
     std::string* getAmenidades() const;
     int getNumAmenidades() const;
@@ -55,7 +55,7 @@ public:
     void setDepartamento(std::string depto);
     void setMunicipio(std::string mun);
     void setTipo(std::string t);
-    void setPrecioPorNoche(double precio);
+    void setPrecioPorNoche(int precio);
     void setDocumentoAnfitrion(std::string docAnfitrion);
 
     // Métodos

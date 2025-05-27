@@ -6,7 +6,7 @@
 using namespace std;
 
 Reservacion::Reservacion() : codigo(""), fechaEntrada(), duracion(1), codigoAlojamiento(""),
-    documentoHuesped(""), metodoPago("PSE"), fechaPago(), monto(0.0), anotaciones("") {}
+    documentoHuesped(""), metodoPago("PSE"), fechaPago(), monto(0), anotaciones("") {}
 
 Reservacion::Reservacion(string cod, Fecha entrada, int dur, string codAloj, string docHuesped,
                          string metodo, Fecha pago, double m, string anot)
@@ -42,7 +42,7 @@ string Reservacion::getCodigoAlojamiento() const { return codigoAlojamiento; }
 string Reservacion::getDocumentoHuesped() const { return documentoHuesped; }
 string Reservacion::getMetodoPago() const { return metodoPago; }
 Fecha Reservacion::getFechaPago() const { return fechaPago; }
-double Reservacion::getMonto() const { return monto; }
+int Reservacion::getMonto() const { return monto; }
 string Reservacion::getAnotaciones() const { return anotaciones; }
 
 void Reservacion::setCodigo(string cod) { codigo = cod; }
@@ -58,7 +58,7 @@ void Reservacion::setMetodoPago(string metodo) {
     }
 }
 void Reservacion::setFechaPago(Fecha pago) { fechaPago = pago; }
-void Reservacion::setMonto(double m) { monto = m; }
+void Reservacion::setMonto(int m) { monto = m; }
 void Reservacion::setAnotaciones(string anot) {
     if (anot.length() > 1000) {
         anotaciones = anot.substr(0, 1000);
@@ -82,7 +82,7 @@ void Reservacion::mostrarComprobante() const {
     cout << "Documento del Huesped: " << documentoHuesped << endl;
     cout << "Metodo de Pago: " << metodoPago << endl;
     cout << "Fecha de Pago: " << fechaPago.toString() << endl;
-    cout << "Monto: $" << fixed << setprecision(2) << monto << endl;
+    cout << "Monto: $" << monto << endl;
     cout << "Anotaciones: ";
     if (anotaciones.empty()) {
         cout << "Ninguna" << endl;

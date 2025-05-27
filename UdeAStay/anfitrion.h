@@ -3,15 +3,13 @@
 
 #include <string>
 
-class Anfitrion
-{
+class Anfitrion {
 private:
+
     std::string documento;
     int antiguedad; // En meses
     double puntuacion; // De 0 a 5.0
     std::string contrasena;
-    std::string* codigosAlojamientos; // Arreglo dinámico de códigos
-    int numAlojamientos; // Número de alojamientos
 
 public:
     //Constructores
@@ -27,8 +25,6 @@ public:
     int getAntiguedad() const;
     double getPuntuacion() const;
     std::string getContrasena() const;
-    std::string* getCodigosAlojamientos() const;
-    int getNumAlojamientos() const;
 
     // Setters
     void setDocumento(std::string doc);
@@ -37,7 +33,6 @@ public:
     void setContrasena(std::string pass);
 
     // Métodos
-    bool agregarAlojamiento(std::string codigo); // Añade un alojamiento
     void mostrarInfo() const; // Muestra los datos del anfitrión
 };
 

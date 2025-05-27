@@ -12,7 +12,7 @@ private:
     std::string documentoHuesped;
     std::string metodoPago; // PSE o TCrédito
     Fecha fechaPago;
-    double monto;
+    int monto;
     std::string anotaciones; // Máximo 1000 caracteres
 
 public:
@@ -33,7 +33,7 @@ public:
     std::string getDocumentoHuesped() const;
     std::string getMetodoPago() const;
     Fecha getFechaPago() const;
-    double getMonto() const;
+    int getMonto() const;
     std::string getAnotaciones() const;
 
     // Setters
@@ -44,7 +44,7 @@ public:
     void setDocumentoHuesped(std::string docHuesped);
     void setMetodoPago(std::string metodo);
     void setFechaPago(Fecha pago);
-    void setMonto(double m);
+    void setMonto(int m);
     void setAnotaciones(std::string anot);
 
     // Métodos
