@@ -63,7 +63,7 @@ public:
     bool agregarAmenidad(std::string amenidad);
     bool cargarAmenidades(const std::string* amenidades, int numAmenidades);
     bool agregarFechaReservada(Fecha inicio, Fecha fin);
-    bool estaDisponible(Fecha inicio, int duracion) const;
+    bool estaDisponible(Fecha inicio, int duracion, const Fecha& fechaCorte) const;
 };
 
 #endif // ALOJAMIENTO_H

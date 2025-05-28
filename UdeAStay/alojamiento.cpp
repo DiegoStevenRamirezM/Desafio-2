@@ -171,27 +171,31 @@ bool Alojamiento::agregarFechaReservada(Fecha inicio, Fecha fin) {
     return true;
 }
 
-bool Alojamiento::estaDisponible(Fecha inicio, int duracion) const {
+bool Alojamiento::estaDisponible(Fecha inicio, int duracion, const Fecha& fechaCorte) const {
     if (duracion <= 0) {
         return false;
     }
+
     Fecha fin = inicio.sumarDias(duracion - 1);
     if (!inicio.esValida() || !fin.esValida()) {
         return false;
     }
-    Fecha hoy(17, 5, 2025);
-    Fecha limite(17, 5, 2026);
+
+    // Limite permitido: hasta 12 meses despues de la fecha de corte actual
+    Fecha hoy = fechaCorte;
+    Fecha limite = fechaCorte.sumarDias(365);
+
+    // Validacion del rango de fechas
     if (inicio < hoy || fin < hoy || inicio > limite || fin > limite) {
         return false;
     }
-    if (inicio > fin) {
-        return false;
-    }
+
+    // Validar que no se cruce con fechas ya reservadas
     for (int i = 0; i < numFechasReservadas; i++) {
         Fecha resInicio = fechasInicio[i];
         Fecha resFin = fechasFin[i];
         if (!(fin < resInicio || inicio > resFin)) {
-            return false;
+            return false; // Hay cruce
         }
     }
     return true;
