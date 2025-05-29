@@ -42,6 +42,9 @@ private:
 
     // actualización de datos
     void actualizarFechaCorte();
+
+    //Resumen de eficiencia
+    void mostrarResumenEficiencia();
 };
 
 #endif // PORTAL_H

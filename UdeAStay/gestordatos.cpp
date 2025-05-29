@@ -1,13 +1,14 @@
 #include "gestordatos.h"
 #include <iostream>
 
-//Constructor y destructor
+// Constructor y destructor
 GestorDatos::GestorDatos()
     : huespedes(nullptr), numHuespedes(0),
     anfitriones(nullptr), numAnfitriones(0),
     alojamientos(nullptr), numAlojamientos(0),
     reservaciones(nullptr), numReservaciones(0),
-    historicas(nullptr), numHistoricas(0) {}
+    historicas(nullptr), numHistoricas(0),
+    iteraciones(0), invocacionesExternas(0) {}
 
 GestorDatos::~GestorDatos() {
     for (int i = 0; i < numHuespedes; i++) delete huespedes[i];
@@ -40,55 +41,65 @@ int GestorDatos::getNumReservacionesHistoricas() const { return numHistoricas; }
 
 // AGREGAR LAS ENTIDADES
 
-//huesped
 bool GestorDatos::agregarHuesped(Huesped* h) {
     if (buscarHuesped(h->getDocumento())) return false;
     Huesped** nuevo = new Huesped*[numHuespedes + 1];
-    for (int i = 0; i < numHuespedes; i++) nuevo[i] = huespedes[i];
+    for (int i = 0; i < numHuespedes; i++) {
+        nuevo[i] = huespedes[i];
+        iteraciones++;
+    }
     nuevo[numHuespedes++] = h;
     delete[] huespedes;
     huespedes = nuevo;
     return true;
 }
 
-//anfitrion
 bool GestorDatos::agregarAnfitrion(Anfitrion* a) {
     if (buscarAnfitrion(a->getDocumento())) return false;
     Anfitrion** nuevo = new Anfitrion*[numAnfitriones + 1];
-    for (int i = 0; i < numAnfitriones; i++) nuevo[i] = anfitriones[i];
+    for (int i = 0; i < numAnfitriones; i++) {
+        nuevo[i] = anfitriones[i];
+        iteraciones++;
+    }
     nuevo[numAnfitriones++] = a;
     delete[] anfitriones;
     anfitriones = nuevo;
     return true;
 }
 
-//Alojamiento
 bool GestorDatos::agregarAlojamiento(Alojamiento* a) {
     if (buscarAlojamiento(a->getCodigo())) return false;
     Alojamiento** nuevo = new Alojamiento*[numAlojamientos + 1];
-    for (int i = 0; i < numAlojamientos; i++) nuevo[i] = alojamientos[i];
+    for (int i = 0; i < numAlojamientos; i++) {
+        nuevo[i] = alojamientos[i];
+        iteraciones++;
+    }
     nuevo[numAlojamientos++] = a;
     delete[] alojamientos;
     alojamientos = nuevo;
     return true;
 }
 
-//Reservacion
 bool GestorDatos::agregarReservacion(Reservacion* r) {
     if (buscarReservacion(r->getCodigo())) return false;
     Reservacion** nuevo = new Reservacion*[numReservaciones + 1];
-    for (int i = 0; i < numReservaciones; i++) nuevo[i] = reservaciones[i];
+    for (int i = 0; i < numReservaciones; i++) {
+        nuevo[i] = reservaciones[i];
+        iteraciones++;
+    }
     nuevo[numReservaciones++] = r;
     delete[] reservaciones;
     reservaciones = nuevo;
     return true;
 }
 
-//Reservacion historica
 bool GestorDatos::agregarReservacionHistorica(Reservacion* r) {
     if (buscarReservacion(r->getCodigo())) return false;
     Reservacion** nuevo = new Reservacion*[numHistoricas + 1];
-    for (int i = 0; i < numHistoricas; i++) nuevo[i] = historicas[i];
+    for (int i = 0; i < numHistoricas; i++) {
+        nuevo[i] = historicas[i];
+        iteraciones++;
+    }
     nuevo[numHistoricas++] = r;
     delete[] historicas;
     historicas = nuevo;
@@ -97,7 +108,6 @@ bool GestorDatos::agregarReservacionHistorica(Reservacion* r) {
 
 // BUSQUEDAS
 
-//huesped
 Huesped* GestorDatos::buscarHuesped(std::string doc) const {
     for (int i = 0; i < numHuespedes; i++) {
         if (huespedes[i]->getDocumento() == doc) return huespedes[i];
@@ -105,7 +115,6 @@ Huesped* GestorDatos::buscarHuesped(std::string doc) const {
     return nullptr;
 }
 
-//anfitrion
 Anfitrion* GestorDatos::buscarAnfitrion(std::string doc) const {
     for (int i = 0; i < numAnfitriones; i++) {
         if (anfitriones[i]->getDocumento() == doc) return anfitriones[i];
@@ -113,7 +122,6 @@ Anfitrion* GestorDatos::buscarAnfitrion(std::string doc) const {
     return nullptr;
 }
 
-//alojamiento
 Alojamiento* GestorDatos::buscarAlojamiento(std::string cod) const {
     for (int i = 0; i < numAlojamientos; i++) {
         if (alojamientos[i]->getCodigo() == cod) return alojamientos[i];
@@ -121,7 +129,6 @@ Alojamiento* GestorDatos::buscarAlojamiento(std::string cod) const {
     return nullptr;
 }
 
-//reservacion
 Reservacion* GestorDatos::buscarReservacion(std::string cod) const {
     for (int i = 0; i < numReservaciones; i++) {
         if (reservaciones[i]->getCodigo() == cod) return reservaciones[i];
@@ -131,26 +138,26 @@ Reservacion* GestorDatos::buscarReservacion(std::string cod) const {
 
 // OPERACIONES CON RESERVAS
 
-//Validar las fechas
 bool GestorDatos::verificarSolapamiento(std::string codAloj, Fecha inicio, int duracion, Fecha fechaCorte) const {
     Alojamiento* a = buscarAlojamiento(codAloj);
-    return a ? !a->estaDisponible(inicio, duracion, fechaCorte) : true;
+    if (!a) return true;
+    return !a->estaDisponible(inicio, duracion, fechaCorte);
 }
 
-//Crear reservacion
 bool GestorDatos::crearReservacion(Reservacion* r, Fecha fechaCorte) {
     if (!buscarHuesped(r->getDocumentoHuesped()) || !buscarAlojamiento(r->getCodigoAlojamiento())) return false;
     if (verificarSolapamiento(r->getCodigoAlojamiento(), r->getFechaEntrada(), r->getDuracion(), fechaCorte)) return false;
     return agregarReservacion(r);
 }
 
-//Cancelar
 bool GestorDatos::cancelarReservacion(std::string cod) {
     for (int i = 0; i < numReservaciones; i++) {
+        iteraciones++;
         if (reservaciones[i]->getCodigo() == cod) {
             delete reservaciones[i];
             for (int j = i; j < numReservaciones - 1; j++) {
                 reservaciones[j] = reservaciones[j + 1];
+                iteraciones++;
             }
             numReservaciones--;
             return true;
@@ -159,22 +166,21 @@ bool GestorDatos::cancelarReservacion(std::string cod) {
     return false;
 }
 
-//Vigentes a historicas
 void GestorDatos::moverReservasAHistorico(const Fecha& fechaCorte) {
     if (numReservaciones <= 0 || reservaciones == nullptr) return;
-
     Reservacion** nuevasVigentes = new Reservacion*[numReservaciones];
     int nuevoNumVigentes = 0;
-
     for (int i = 0; i < numReservaciones; i++) {
+        iteraciones++;
         if (reservaciones[i] == nullptr) continue;
-
         Fecha entrada = reservaciones[i]->getFechaEntrada();
         Fecha salida = reservaciones[i]->getFechaSalida();
-
         if (salida < fechaCorte) {
             Reservacion** nuevasHistoricas = new Reservacion*[numHistoricas + 1];
-            for (int j = 0; j < numHistoricas; j++) nuevasHistoricas[j] = historicas[j];
+            for (int j = 0; j < numHistoricas; j++) {
+                nuevasHistoricas[j] = historicas[j];
+                iteraciones++;
+            }
             nuevasHistoricas[numHistoricas] = reservaciones[i];
             delete[] historicas;
             historicas = nuevasHistoricas;
@@ -183,43 +189,54 @@ void GestorDatos::moverReservasAHistorico(const Fecha& fechaCorte) {
             nuevasVigentes[nuevoNumVigentes++] = reservaciones[i];
         }
     }
-
     delete[] reservaciones;
     reservaciones = nuevasVigentes;
     numReservaciones = nuevoNumVigentes;
-
     std::cout << "Reservas vigentes e historicas actualizadas en memoria.\n";
 }
 
-//codigo reservacion
 std::string GestorDatos::generarCodigoReserva() {
     int n = 1;
     bool existe;
     std::string codigo;
-
     do {
         codigo = "r" + std::to_string(n++);
         existe = false;
-
         for (int i = 0; i < numReservaciones; i++) {
+            iteraciones++;
             if (reservaciones[i]->getCodigo() == codigo) {
                 existe = true;
                 break;
             }
         }
-
         if (!existe) {
             for (int i = 0; i < numHistoricas; i++) {
+                iteraciones++;
                 if (historicas[i]->getCodigo() == codigo) {
                     existe = true;
                     break;
                 }
             }
         }
-
     } while (existe);
-
     return codigo;
+}
+
+// MÉTODOS NUEVOS PARA CONTAR RECURSOS
+int GestorDatos::getIteraciones() const {
+    return iteraciones;
+}
+
+int GestorDatos::getInvocacionesExternas() const {
+    return invocacionesExternas;
+}
+
+void GestorDatos::sumarIteraciones(int n) {
+    iteraciones += n;
+}
+
+void GestorDatos::sumarInvocacionesExternas(int n) {
+    invocacionesExternas++;
 }
 
 

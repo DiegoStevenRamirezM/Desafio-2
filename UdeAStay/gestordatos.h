@@ -9,7 +9,7 @@
 
 class GestorDatos {
 public:
-    //Constructor y destructor
+    // Constructor y destructor
     GestorDatos();
     ~GestorDatos();
 
@@ -45,6 +45,12 @@ public:
     void moverReservasAHistorico(const Fecha& fechaCorte);
     std::string generarCodigoReserva();
 
+    // Contadores de eficiencia
+    int getIteraciones() const;
+    void sumarIteraciones(int n);
+    int getInvocacionesExternas() const;
+    void sumarInvocacionesExternas(int n);
+
 private:
     Huesped** huespedes;
     int numHuespedes;
@@ -56,6 +62,10 @@ private:
     int numReservaciones;
     Reservacion** historicas;
     int numHistoricas;
+
+    // Contadores de eficiencia
+    int iteraciones = 0;
+    int invocacionesExternas = 0;
 };
 
 #endif // GESTORDATOS_H
