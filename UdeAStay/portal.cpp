@@ -58,8 +58,10 @@ void Portal::mostrarMenuPrincipal() {
             cout << "\n--- Inicio de sesion (Huesped) ---\n";
             cout << "Documento: ";
             getline( cin, doc);
+            gestorDatos.sumarInvocacionesExternas(1); // getline
             cout << "Contrasena: ";
             getline( cin, pass);
+            gestorDatos.sumarInvocacionesExternas(1); // getline
             if (loginHuesped(doc, pass)) {
                 mostrarMenuHuesped(doc);
             } else {
@@ -71,8 +73,10 @@ void Portal::mostrarMenuPrincipal() {
             cout << "\n--- Inicio de sesion (Anfitrion) ---\n";
             cout << "Documento: ";
             getline( cin, doc);
+            gestorDatos.sumarInvocacionesExternas(1); // getline
             cout << "Contrasena: ";
             getline( cin, pass);
+            gestorDatos.sumarInvocacionesExternas(1); // getline
             if (loginAnfitrion(doc, pass)) {
                 mostrarMenuAnfitrion(doc);
             } else {
@@ -86,6 +90,7 @@ void Portal::mostrarMenuPrincipal() {
             gestorArchivos.guardarReservacionesHistoricas("reservas_historicas.txt", &gestorDatos);
             gestorArchivos.guardarFechaCorte(fechaCorte);
             cout << "Datos guardados correctamente.\n";
+            mostrarResumenEficiencia();
             cout << "Gracias por usar UdeAStay. Hasta pronto.\n";
             salir = true;
             break;
@@ -194,10 +199,11 @@ void Portal::mostrarMenuAnfitrion(const  string& documento) {
     }
 }
 
+
 //GESTION DE RESERVAS
 
 //Crear una reserva
-void Portal::crearReservacionConCodigo(const  string& documento, const  string& codAloj, Fecha entrada, int duracion) {
+void Portal::crearReservacionConCodigo(const string& documento, const string& codAloj, Fecha entrada, int duracion) {
     string codigo = gestorDatos.generarCodigoReserva();
     string metodo, anotacion;
     int monto;
@@ -206,14 +212,16 @@ void Portal::crearReservacionConCodigo(const  string& documento, const  string& 
     cout << "Codigo generado automaticamente: " << codigo << "\n";
 
     cout << "Metodo de pago: ";
-    getline( cin, metodo);
+    getline(cin, metodo);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     cout << "Monto (COP): ";
     cin >> monto;
     cin.ignore();
 
     cout << "Anotaciones (opcional): ";
-    getline( cin, anotacion);
+    getline(cin, anotacion);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     Fecha fechaPago = fechaCorte;
 
@@ -238,6 +246,7 @@ void Portal::crearReservacionConCodigo(const  string& documento, const  string& 
         cin >> r;
         cin.ignore();
         if (tolower(r) != 's') {
+            gestorDatos.sumarInvocacionesExternas(1); // tolower
             cout << "Reservacion cancelada.\n";
             return;
         }
@@ -250,6 +259,7 @@ void Portal::crearReservacionConCodigo(const  string& documento, const  string& 
         cin >> r;
         cin.ignore();
         if (tolower(r) != 's') {
+            gestorDatos.sumarInvocacionesExternas(1); // tolower
             cout << "Reservacion cancelada.\n";
             return;
         }
@@ -272,9 +282,8 @@ void Portal::crearReservacionConCodigo(const  string& documento, const  string& 
     }
 }
 
-
 //Cancelar una reservacion (huesped)
-void Portal::cancelarReservacionComoHuesped(const  string& documento) {
+void Portal::cancelarReservacionComoHuesped(const string& documento) {
     Reservacion** todas = gestorDatos.getReservaciones();
     int n = gestorDatos.getNumReservaciones();
     Fecha hoy = fechaCorte;
@@ -298,7 +307,8 @@ void Portal::cancelarReservacionComoHuesped(const  string& documento) {
 
     string codigo;
     cout << "\nIngrese el codigo de la reservacion que desea cancelar: ";
-    getline( cin, codigo);
+    getline(cin, codigo);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     Reservacion* r = gestorDatos.buscarReservacion(codigo);
     if (!r) {
@@ -318,9 +328,8 @@ void Portal::cancelarReservacionComoHuesped(const  string& documento) {
         cout << "Error al cancelar la reservacion.\n";
     }
 }
-
 //Cancelar una reservacion (Anfitrion)
-void Portal::cancelarReservacionComoAnfitrion(const  string& documento) {
+void Portal::cancelarReservacionComoAnfitrion(const string& documento) {
     Alojamiento** todos = gestorDatos.getAlojamientos();
     int totalAlojamientos = gestorDatos.getNumAlojamientos();
 
@@ -329,7 +338,7 @@ void Portal::cancelarReservacionComoAnfitrion(const  string& documento) {
 
     for (int i = 0; i < totalAlojamientos; i++) {
         if (todos[i]->getDocumentoAnfitrion() == documento) {
-            string* nuevo = new  string[numAlojamientos + 1];
+            string* nuevo = new string[numAlojamientos + 1];
             for (int j = 0; j < numAlojamientos; j++) {
                 nuevo[j] = codigosAlojamientos[j];
             }
@@ -375,7 +384,8 @@ void Portal::cancelarReservacionComoAnfitrion(const  string& documento) {
 
     string codigo;
     cout << "\nIngrese el codigo de la reservacion que desea cancelar: ";
-    getline( cin, codigo);
+    getline(cin, codigo);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     Reservacion* r = gestorDatos.buscarReservacion(codigo);
     if (!r) {
@@ -399,7 +409,7 @@ void Portal::cancelarReservacionComoAnfitrion(const  string& documento) {
 }
 
 //Mostrar las reservas vigentes (Huesped)
-void Portal::mostrarReservasVigentesHuesped(const  string& documento) {
+void Portal::mostrarReservasVigentesHuesped(const string& documento) {
     Huesped* h = gestorDatos.buscarHuesped(documento);
     if (!h) {
         cout << "Huesped no encontrado.\n";
@@ -410,7 +420,7 @@ void Portal::mostrarReservasVigentesHuesped(const  string& documento) {
 
     Reservacion** todas = gestorDatos.getReservaciones();
     int n = gestorDatos.getNumReservaciones();
-    Fecha hoy = fechaCorte;  // Se usa la fecha cargada desde el archivo
+    Fecha hoy = fechaCorte;
 
     bool hayActivas = false;
 
@@ -429,7 +439,7 @@ void Portal::mostrarReservasVigentesHuesped(const  string& documento) {
 }
 
 //Ver las reservas de un alojamiento en un rango de fechas (Anfitrion)
-void Portal::verReservasDeAlojamientos(const  string& docAnfitrion) {
+void Portal::verReservasDeAlojamientos(const string& docAnfitrion) {
     int dia1, mes1, anio1;
     int dia2, mes2, anio2;
 
@@ -438,6 +448,7 @@ void Portal::verReservasDeAlojamientos(const  string& docAnfitrion) {
     cout << "Ingrese la fecha final del rango (dd mm aaaa): ";
     cin >> dia2 >> mes2 >> anio2;
     cin.ignore();
+    gestorDatos.sumarInvocacionesExternas(1); // cin.ignore()
 
     Fecha inicio(dia1, mes1, anio1);
     Fecha fin(dia2, mes2, anio2);
@@ -455,7 +466,7 @@ void Portal::verReservasDeAlojamientos(const  string& docAnfitrion) {
 
     for (int i = 0; i < totalAlojamientos; i++) {
         if (todos[i]->getDocumentoAnfitrion() == docAnfitrion) {
-            string* nuevo = new  string[numAlojamientos + 1];
+            string* nuevo = new string[numAlojamientos + 1];
             for (int j = 0; j < numAlojamientos; j++) {
                 nuevo[j] = codigosAlojamientos[j];
             }
@@ -474,7 +485,7 @@ void Portal::verReservasDeAlojamientos(const  string& docAnfitrion) {
     cout << "\nTus alojamientos registrados son: ";
     for (int i = 0; i < numAlojamientos; i++) {
         cout << codigosAlojamientos[i];
-        if (i < numAlojamientos - 1)  cout << ", ";
+        if (i < numAlojamientos - 1) cout << ", ";
     }
     cout << "\n";
 
@@ -510,17 +521,18 @@ void Portal::verReservasDeAlojamientos(const  string& docAnfitrion) {
 //BUSQUEDAS
 
 //Buscar alojamiento por filtro
-void Portal::buscarAlojamientoConFiltros(const  string& documento) {
+void Portal::buscarAlojamientoConFiltros(const string& documento) {
     string municipio;
     int dia, mes, anio, duracion;
 
     cout << "\n=== Busqueda de Alojamiento ===\n";
     cout << "Municipio: ";
-    getline( cin, municipio);
+    getline(cin, municipio);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
-    // Convertir municipio a minusculas
     for (int i = 0; i < municipio.length(); i++) {
         municipio[i] = tolower(municipio[i]);
+        gestorDatos.sumarInvocacionesExternas(1); // tolower
     }
 
     cout << "Fecha de entrada (dd mm aaaa): ";
@@ -528,6 +540,7 @@ void Portal::buscarAlojamientoConFiltros(const  string& documento) {
     cout << "Duracion en noches: ";
     cin >> duracion;
     cin.ignore();
+    gestorDatos.sumarInvocacionesExternas(1); // cin.ignore
 
     Fecha entrada(dia, mes, anio);
 
@@ -542,6 +555,7 @@ void Portal::buscarAlojamientoConFiltros(const  string& documento) {
         string muniAloj = todos[i]->getMunicipio();
         for (int j = 0; j < muniAloj.length(); j++) {
             muniAloj[j] = tolower(muniAloj[j]);
+            gestorDatos.sumarInvocacionesExternas(1); // tolower
         }
 
         if (muniAloj == municipio && todos[i]->estaDisponible(entrada, duracion, fechaCorte)) {
@@ -567,8 +581,10 @@ void Portal::buscarAlojamientoConFiltros(const  string& documento) {
     cout << "\n¿Desea aplicar filtros por precio o puntuacion? (s/n): ";
     cin >> aplicarFiltros;
     cin.ignore();
+    gestorDatos.sumarInvocacionesExternas(1); // cin.ignore
 
     if (tolower(aplicarFiltros) == 's') {
+        gestorDatos.sumarInvocacionesExternas(1); // tolower
         double precioMax = -1;
         double puntMin = -1;
         char aplicarPrecio, aplicarPunt;
@@ -576,18 +592,23 @@ void Portal::buscarAlojamientoConFiltros(const  string& documento) {
         cout << "¿Filtrar por precio maximo? (s/n): ";
         cin >> aplicarPrecio;
         if (tolower(aplicarPrecio) == 's') {
+            gestorDatos.sumarInvocacionesExternas(1);
             cout << "Precio maximo por noche: ";
             cin >> precioMax;
         }
         cin.ignore();
+        gestorDatos.sumarInvocacionesExternas(1);
 
         cout << "¿Filtrar por puntuacion minima del anfitrion? (s/n): ";
         cin >> aplicarPunt;
         if (tolower(aplicarPunt) == 's') {
+            gestorDatos.sumarInvocacionesExternas(1);
             cout << "Puntuacion minima: ";
             cin >> puntMin;
+            gestorDatos.sumarInvocacionesExternas(1);
         }
         cin.ignore();
+        gestorDatos.sumarInvocacionesExternas(1);
 
         Alojamiento** filtrados = nullptr;
         int numFiltrados = 0;
@@ -626,33 +647,35 @@ void Portal::buscarAlojamientoConFiltros(const  string& documento) {
 
     string codigo;
     cout << "\nIngrese el codigo del alojamiento que desea reservar: ";
-    getline( cin, codigo);
+    getline(cin, codigo);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     crearReservacionConCodigo(documento, codigo, entrada, duracion);
     delete[] disponibles;
 }
 
 //Buscar alojamiento por codigo
-void Portal::buscarAlojamientoPorCodigo(const  string& documento) {
+void Portal::buscarAlojamientoPorCodigo(const string& documento) {
     string codigo;
     int dia, mes, anio, duracion;
 
     cout << "\n=== Busqueda por Codigo ===\n";
     cout << "Ingrese el codigo del alojamiento: ";
-    getline( cin, codigo);
+    getline(cin, codigo);
+    gestorDatos.sumarInvocacionesExternas(1); // getline
 
     cout << "Fecha de entrada (dd mm aaaa): ";
     cin >> dia >> mes >> anio;
-
     cout << "Duracion en noches: ";
     cin >> duracion;
     cin.ignore();
+    gestorDatos.sumarInvocacionesExternas(1); // cin.ignore
 
     Fecha entrada(dia, mes, anio);
     crearReservacionConCodigo(documento, codigo, entrada, duracion);
 }
 
-//Actualizacion de la fecha de corte
+//Actualizar la fecha de corte
 void Portal::actualizarFechaCorte() {
     int d, m, a;
 
@@ -660,6 +683,7 @@ void Portal::actualizarFechaCorte() {
     cout << "Ingrese la fecha de hoy (dd mm aaaa): ";
     cin >> d >> m >> a;
     cin.ignore();
+    gestorDatos.sumarInvocacionesExternas(1); // cin.ignore
 
     Fecha nueva(d, m, a);
     if (!nueva.esValida()) {
@@ -667,10 +691,9 @@ void Portal::actualizarFechaCorte() {
         return;
     }
 
-    // Verificar que la nueva fecha de corte no sea anterior a la ultima reserva historica
     Reservacion** historicas = gestorDatos.getReservacionesHistoricas();
     int numHistoricas = gestorDatos.getNumReservacionesHistoricas();
-    Fecha mayorFechaSalida(1, 1, 1900);  // Fecha base
+    Fecha mayorFechaSalida(1, 1, 1900);
 
     for (int i = 0; i < numHistoricas; i++) {
         Fecha salida = historicas[i]->getFechaSalida();
@@ -685,12 +708,45 @@ void Portal::actualizarFechaCorte() {
         return;
     }
 
-    // Actualizar y mover reservas
     fechaCorte = nueva;
-
     cout << "\nMoviendo reservas al historico segun la nueva fecha...\n";
     gestorArchivos.moverReservasHistorico(fechaCorte, &gestorDatos);
     gestorArchivos.guardarFechaCorte(fechaCorte);
 
     cout << "Fecha de corte actualizada a: " << fechaCorte.toString() << "\n";
+}
+
+//Menu de eficiencia y medicion de consumo en memoria
+void Portal::mostrarResumenEficiencia() {
+    int iter = gestorDatos.getIteraciones();
+    int invocaciones = gestorDatos.getInvocacionesExternas();
+
+    // Tamaño de los arreglos de punteros
+    int memoriaHuespedes = sizeof(Huesped*) * gestorDatos.getNumHuespedes();
+    int memoriaAnfitriones = sizeof(Anfitrion*) * gestorDatos.getNumAnfitriones();
+    int memoriaAlojamientos = sizeof(Alojamiento*) * gestorDatos.getNumAlojamientos();
+    int memoriaReservas = sizeof(Reservacion*) * gestorDatos.getNumReservaciones();
+    int memoriaHistoricas = sizeof(Reservacion*) * gestorDatos.getNumReservacionesHistoricas();
+
+    // Memoria para fechas: 1 fechaCorte + 2 por cada reservación
+    int numReservas = gestorDatos.getNumReservaciones();
+    int numHistoricas = gestorDatos.getNumReservacionesHistoricas();
+    int totalFechas = 1 + 2 * (numReservas + numHistoricas);
+    int memoriaFechas = totalFechas * sizeof(Fecha);  // Cada Fecha pesa 12 bytes
+
+    // Total
+    int totalMemoria = memoriaHuespedes + memoriaAnfitriones + memoriaAlojamientos +
+                       memoriaReservas + memoriaHistoricas + memoriaFechas;
+
+    std::cout << "\n--- RESUMEN DE EFICIENCIA ---\n";
+    std::cout << iter << " iteraciones + " << invocaciones << " invocaciones de metodos externos\n";
+
+    // Memoria
+    std::cout << "Memoria usada (en bytes): " << totalMemoria << "\n";
+
+    // Costo computacional explicado
+    //O(n) es el comportamiento teórico esperado. Se espera que las búsquedas y recorridos tarden proporcional a la cantidad de elementos.
+    std::cout << endl;
+    std::cout << "Costo computacional teorico: O(n)\n";
+    std::cout << "Explicacion: Se recorren arreglos dinamicos de tamaño n (reservas, alojamientos, etc.)\n";
 }
