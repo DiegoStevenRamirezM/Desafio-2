@@ -196,3 +196,6 @@ codigo,fechaEntrada,duracion,codigoAlojamiento,documentoHuesped,metodoPago,fecha
 - **fecha_corte.txt**  
 dd-mm-aaaa
 
+## 🖼️ **Este es mi diagrama de clases FINAL** 
+![Diagrama UML FINAL](./Diagrama%20UML%20FINAL.jpg)
+
