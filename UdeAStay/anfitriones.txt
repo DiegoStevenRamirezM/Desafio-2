@@ -1,0 +1,3 @@
+900,10,4.6,anfitrion900
+901,8,4.9,anfitrion901
+902,6,4.3,anfitrion902

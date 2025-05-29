@@ -1,0 +1,5 @@
+A1,Casa Azul,Calle 10,Antioquia,Medellin,Casa,150000,900,Wifi;Patio
+A2,Apto Verde,Carrera 45,Antioquia,Bello,Apartamento,130000,900,Wifi;Ascensor
+A3,Finca El Sol,Vereda El Oro,Antioquia,Rionegro,Casa,250000,901,Wifi;Piscina;Patio
+A4,Cabaña La Luna,Camino Rural 12,Antioquia,Guatapé,Cabaña,180000,901,Wifi;Chimenea
+A5,Apto Centro,Calle 52,Antioquia,Medellin,Apartamento,120000,902,Wifi;Ascensor
