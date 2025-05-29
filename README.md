@@ -121,3 +121,78 @@ El diagrama de clases es la columna vertebral del diseño orientado a objetos en
 | Alojamiento   | Fecha (reservas) |  Composición (0..N) | Las fechas de reserva son parte integral del `Alojamiento`. Si se elimina el alojamiento, sus fechas reservadas también desaparecen . |
 | Huesped       | Reservacion      |  Asociación débil (0..N) | El `Huesped` solo guarda códigos (strings) de reservas, no instancias. Relación indirecta sin dependencia estructural. |
 | Anfitrion     | Alojamiento      |  Asociación débil (0..N) | El `Anfitrion` referencia alojamientos mediante códigos (strings), sin contener los objetos directamente. Relación lógica, no estructural. |
+
+---
+## Actualizacion final
+### 3. Descripción de algoritmos clave
+
+A continuación se describen, en alto nivel, algunos de los subprogramas más importantes del sistema:
+
+- **crearReservacion():**  
+  Verifica si el alojamiento está disponible para las fechas deseadas. Si no hay conflictos, crea el objeto `Reservacion`, lo agrega al arreglo dinámico y guarda la información en archivo. También calcula la fecha de salida sumando la duración a la fecha de entrada.
+
+- **moverReservasAHistorico():**  
+  Recorre las reservaciones activas y, si su fecha de entrada es anterior a la fecha de corte, las mueve al arreglo de reservas históricas. Además, actualiza los archivos eliminando esas reservas del archivo de vigentes y agregándolas al archivo histórico.
+
+- **estaDisponible():**  
+  Evalúa si un alojamiento tiene disponible el rango de fechas solicitado. Compara las fechas nuevas con cada intervalo existente para evitar solapamientos. Utiliza la fecha de corte como límite inferior válido.
+
+- **mostrarResumenEficiencia():**  
+  Se invoca al final del programa. Calcula la memoria total usada con base en el tamaño de los arreglos dinámicos y muestra el número total de iteraciones e invocaciones a métodos externos, como parte del análisis computacional.
+
+---
+
+### 4. Problemas de desarrollo y decisiones tomadas
+
+Durante el desarrollo del sistema se presentaron varios desafíos técnicos:
+
+- Inicialmente, los códigos de reservación estaban almacenados dentro de la clase `Huesped`, lo que causaba duplicación de datos y problemas de sincronización con los archivos. Por esta razón, se optó por eliminarlos y confiar en la búsqueda directa desde el archivo o desde `GestorDatos`.
+
+- De forma similar, los códigos de alojamientos fueron eliminados de la clase `Anfitrion`, ya que el vínculo ya se establece a través del atributo `documentoAnfitrion` en la clase `Alojamiento`.
+
+- Para garantizar la unicidad de los códigos de reserva sin utilizar STL, se implementó una función de generación automática que verifica contra los códigos existentes tanto en reservas vigentes como en las históricas.
+
+- Medir la eficiencia del sistema sin alterar clases como `GestorArchivos` representó un reto. Para solucionarlo, se creó un sistema de contadores dentro de `GestorDatos`, que puede ser invocado por otras clases para reportar iteraciones e invocaciones externas sin romper la modularidad.
+
+---
+
+### 5. Medición del consumo de recursos y eficiencia
+
+Como parte del análisis de eficiencia del sistema UdeAStay, se incluyó un mecanismo automático que evalúa el consumo de recursos computacionales. Al finalizar la ejecución del programa, se imprime un resumen con:
+
+- **Número total de iteraciones:**  
+  Se cuenta manualmente cada iteración importante dentro de los bucles que recorren arreglos dinámicos. Se suma mediante el método `sumarIteraciones(int)`.
+
+- **Número de invocaciones externas:**  
+  Se lleva un conteo específico de invocaciones a funciones como `getline`, `stoi`, `tolower`, entre otras. Estas se registran mediante `sumarInvocacionesExternas(int)` solo si impactan el procesamiento lógico.
+
+- **Memoria usada:**  
+  Se calcula manualmente estimando el tamaño ocupado por los arreglos dinámicos (cantidad de objetos multiplicado por su peso estimado en bytes). Esta cifra no es precisa a nivel de sistema operativo, pero permite un análisis proporcional del uso de memoria.
+
+- **Costo computacional global:**  
+  La complejidad del sistema es **O(n)** para la mayoría de sus operaciones, ya que utiliza estructuras simples como arreglos dinámicos y búsquedas secuenciales.
+
+---
+
+### 6. Formato detallado de archivos de texto
+
+Para la persistencia de datos, el sistema utiliza archivos `.txt` legibles, organizados por entidad. A continuación se describen sus formatos:
+
+- **huespedes.txt**  
+documento,antiguedad,puntuacion,contrasena
+
+- **anfitriones.txt**  
+documento,antiguedad,puntuacion,contrasena
+
+- **alojamientos.txt**  
+codigo,nombre,direccion,departamento,municipio,tipo,precio,documentoAnfitrion,numAmenidades,amenidad1,...,amenidadN
+
+- **reservas_vigentes.txt**  
+codigo,fechaEntrada,duracion,codigoAlojamiento,documentoHuesped,metodoPago,fechaPago,monto,anotaciones
+
+- **reservas_historicas.txt**  
+codigo,fechaEntrada,duracion,codigoAlojamiento,documentoHuesped,metodoPago,fechaPago,monto,anotaciones
+
+- **fecha_corte.txt**  
+dd-mm-aaaa
+
